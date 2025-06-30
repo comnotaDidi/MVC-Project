@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>📚 Предметы | Tracker</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- AOS Animate -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Rubik', sans-serif;
+      background: linear-gradient(135deg, #0f0f13, #1f1f2b);
+      color: #f1f1f1;
+      padding: 40px 0;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      font-weight: 700;
+      font-size: 2.7rem;
+      text-align: center;
+      margin-bottom: 40px;
+      background: linear-gradient(90deg, #6c5ce7, #00cec9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-pills .nav-link {
+      background: transparent;
+      color: #aaa;
+      border-bottom: 3px solid transparent;
+      border-radius: 0;
+      font-size: 1.1rem;
+      transition: 0.3s;
+    }
+
+    .nav-pills .nav-link.active {
+      color: #fff;
+      border-color: #00cec9;
+    }
+
+    .card-subject {
+      background: #1e1f26;
+      border-radius: 18px;
+      padding: 24px;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 10px rgba(0, 204, 255, 0.08);
+      transition: 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 160px;
+    }
+
+    .card-subject:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 20px rgba(0, 204, 255, 0.2);
+    }
+
+    .card-subject.completed {
+      opacity: 0.5;
+      text-decoration: line-through;
+      box-shadow: none;
+    }
+
+    .subject-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-toggle {
+      background: none;
+      border: none;
+      color: #00cec9;
+      font-size: 1.6rem;
+      cursor: pointer;
+    }
+
+    .btn-lesson {
+      margin-top: 20px;
+      display: inline-block;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-weight: 600;
+      background: linear-gradient(90deg, #6c5ce7, #00cec9);
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 0 12px rgba(108, 92, 231, 0.5);
+      transition: background 0.3s ease;
+      text-align: center;
+    }
+
+    .btn-lesson:hover {
+      background: linear-gradient(90deg, #00cec9, #6c5ce7);
+    }
+
+    .btn-add {
+      background: linear-gradient(90deg, #00cec9, #6c5ce7);
+      border: none;
+      padding: 14px 30px;
+      border-radius: 40px;
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      box-shadow: 0 0 14px rgba(0, 206, 201, 0.4);
+      transition: transform 0.2s ease;
+      cursor: pointer;
+    }
+
+    .btn-add:hover {
+      transform: scale(1.05);
+    }
+
+    .modal-content {
+      background-color: #121218;
+      color: white;
+      border: 1px solid #2f2f38;
+      border-radius: 12px;
+    }
+
+    .form-control {
+      background-color: #1d1d25;
+      color: white;
+      border: 1px solid #444;
+    }
+
+    .subject-actions button,
+    .subject-actions a {
+      margin-left: 10px;
+      color: #00cec9;
+      font-size: 1.3rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .subject-actions button:hover,
+    .subject-actions a:hover {
+      color: #6c5ce7;
+    }
+
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    /* Progress bar style */
+    .progress {
+      height: 6px;
+      border-radius: 4px;
+      background-color: #333;
+      margin-top: 10px;
+    }
+    .progress-bar {
+      background: linear-gradient(90deg, #6c5ce7, #00cec9);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 data-aos="fade-down">🚀 Учебный Трекер</h1>
+
+    <!-- Вкладки -->
+    <ul class="nav nav-pills justify-content-center mb-4" id="tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="all-tab" data-bs-toggle="pill" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">Все</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="active-tab" data-bs-toggle="pill" data-bs-target="#active" type="button" role="tab" aria-controls="active" aria-selected="false">Активные</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="done-tab" data-bs-toggle="pill" data-bs-target="#done" type="button" role="tab" aria-controls="done" aria-selected="false">Завершённые</button>
+      </li>
+    </ul>
+
+    <div class="text-center mb-5">
+      <button class="btn btn-add" data-bs-toggle="modal" data-bs-target="#addModal">➕ Добавить предмет</button>
+    </div>
+
+    <div class="tab-content" id="tabContent">
+      <!-- Все предметы -->
+      <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+        <div class="row g-4">
+          <% if (subjects.length === 0) { %>
+            <p class="text-center text-secondary">Пока нет предметов.</p>
+          <% } %>
+          <% subjects.forEach((s, i) => { %>
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="<%= i * 80 %>">
+              <div class="card-subject <%= s.completed ? 'completed' : '' %>">
+                <div class="subject-header">
+                  <h5><%= s.name %></h5>
+                  <div class="subject-actions d-flex align-items-center">
+                    <button class="btn-toggle toggle-completed" data-id="<%= s.id %>" title="<%= s.completed ? 'Отметить как активный' : 'Отметить как завершённый' %>">
+                      <i data-lucide="<%= s.completed ? 'rotate-ccw' : 'check-circle' %>"></i>
+                    </button>
+                    <a href="/subjects/edit/<%= s.id %>" title="Редактировать">
+                      <i data-lucide="edit-2"></i>
+                    </a>
+                    <form action="/subjects/delete/<%= s.id %>" method="POST" style="display:inline;">
+                      <button type="submit" title="Удалить" onclick="return confirm('Удалить предмет?');" style="background:none; border:none; padding:0; color:#00cec9; cursor:pointer;">
+                        <i data-lucide="trash-2"></i>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+                <% if (typeof s.progressPercent !== 'undefined') { %>
+                  <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: <%= s.progressPercent %>%;" aria-valuenow="<%= s.progressPercent %>" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                <% } %>
+                <a href="/lessons/<%= s.id %>" class="btn-lesson">📘 Перейти к урокам</a>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      </div>
+
+      <!-- Активные -->
+      <div class="tab-pane fade" id="active" role="tabpanel" aria-labelledby="active-tab">
+        <div class="row g-4">
+          <% subjects.filter(s => !s.completed).forEach((s, i) => { %>
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="<%= i * 80 %>">
+              <div class="card-subject">
+                <div class="subject-header">
+                  <h5><%= s.name %></h5>
+                  <div class="subject-actions d-flex align-items-center">
+                    <button class="btn-toggle toggle-completed" data-id="<%= s.id %>" title="Отметить как завершённый">
+                      <i data-lucide="check-circle"></i>
+                    </button>
+                    <a href="/subjects/edit/<%= s.id %>" title="Редактировать">
+                      <i data-lucide="edit-2"></i>
+                    </a>
+                    <form action="/subjects/delete/<%= s.id %>" method="POST" style="display:inline;">
+                      <button type="submit" title="Удалить" onclick="return confirm('Удалить предмет?');" style="background:none; border:none; padding:0; color:#00cec9; cursor:pointer;">
+                        <i data-lucide="trash-2"></i>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+                <% if (typeof s.progressPercent !== 'undefined') { %>
+                  <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: <%= s.progressPercent %>%;" aria-valuenow="<%= s.progressPercent %>" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                <% } %>
+                <a href="/lessons/<%= s.id %>" class="btn-lesson">📘 Перейти к урокам</a>
+              </div>
+            </div>
+          <% }); %>
+          <% if (subjects.filter(s => !s.completed).length === 0) { %>
+            <p class="text-center text-secondary">Нет активных предметов.</p>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Завершённые -->
+      <div class="tab-pane fade" id="done" role="tabpanel" aria-labelledby="done-tab">
+        <div class="row g-4">
+          <% subjects.filter(s => s.completed).forEach((s, i) => { %>
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="<%= i * 80 %>">
+              <div class="card-subject completed">
+                <div class="subject-header">
+                  <h5><%= s.name %></h5>
+                  <div class="subject-actions d-flex align-items-center">
+                    <button class="btn-toggle toggle-completed" data-id="<%= s.id %>" title="Отметить как активный">
+                      <i data-lucide="rotate-ccw"></i>
+                    </button>
+                    <a href="/subjects/edit/<%= s.id %>" title="Редактировать">
+                      <i data-lucide="edit-2"></i>
+                    </a>
+                    <form action="/subjects/delete/<%= s.id %>" method="POST" style="display:inline;">
+                      <button type="submit" title="Удалить" onclick="return confirm('Удалить предмет?');" style="background:none; border:none; padding:0; color:#00cec9; cursor:pointer;">
+                        <i data-lucide="trash-2"></i>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+                <% if (typeof s.progressPercent !== 'undefined') { %>
+                  <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: <%= s.progressPercent %>%;" aria-valuenow="<%= s.progressPercent %>" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                <% } %>
+                <a href="/lessons/<%= s.id %>" class="btn-lesson">📘 Перейти к урокам</a>
+              </div>
+            </div>
+          <% }); %>
+          <% if (subjects.filter(s => s.completed).length === 0) { %>
+            <p class="text-center text-secondary">Нет завершённых предметов.</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно Добавить предмет -->
+  <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form action="/subjects/add" method="POST" class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addModalLabel">Добавить предмет</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" name="name" class="form-control" placeholder="Название предмета" required autofocus>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-add">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Учебный Трекер
+  </footer>
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Lucide Icons Init -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.replace();
+    });
+  </script>
+
+  <!-- AOS Init -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      once: true,
+      duration: 600,
+      easing: 'ease-out-quart',
+    });
+  </script>
+
+  <!-- Toggle completed status -->
+  <script>
+    document.querySelectorAll('.toggle-completed').forEach(button => {
+      button.addEventListener('click', async () => {
+        const id = button.dataset.id;
+        try {
+          const response = await fetch(`/subjects/toggle/${id}`, { method: 'POST' });
+          if (response.ok) {
+            location.reload();
+          } else {
+            alert('Ошибка обновления статуса.');
+          }
+        } catch (e) {
+          alert('Ошибка сети.');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
