@@ -39,6 +39,7 @@ SMPN – aplikacja webowa która jest wykonana w języku JavaScript z użyciem N
 ## 🖼️ Zrzuty ekranu aplikacji 
 Strona główna z listą filmów
 ![learning-tracker](./screenshots/1.jpg)
+![learning-tracker](./screenshots/2.jpg)
 
 ### Instalacja projektu
 
