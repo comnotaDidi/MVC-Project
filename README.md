@@ -36,6 +36,10 @@ SMPN – aplikacja webowa która jest wykonana w języku JavaScript z użyciem N
 ## Instalacja potrzebnych bibliotek 
 Żeby zainstalować biblioteki które są będzie potrzebował projekt przy uruchomieniu projektu na innym komputerze należy wpisać: npm install
 
+## 🖼️ Zrzuty ekranu aplikacji 
+Strona główna z listą filmów
+![learning-tracker](C:/Users/Сергей/Documents/mwc ostap/learning-tracker/screenshots/1.jpg)
+
 ### Instalacja projektu
 
 ```bash
@@ -43,7 +47,3 @@ git clone https://github.com/comnotaDidi/MVC-Project.git
 cd learning-tracker
 npm install
 node app.js
-
-## 🖼️ Zrzuty ekranu aplikacji 
-Strona główna z listą filmów
-![learning-tracker](C:/Users/Сергей/Documents/mwc ostap/learning-tracker/screenshots/1.jpg)
