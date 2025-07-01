@@ -46,4 +46,4 @@ node app.js
 
 ## 🖼️ Zrzuty ekranu aplikacji 
 Strona główna z listą filmów
-![learning-tracker](./screenshots/1.png)
+![learning-tracker](./screenshots/1.jpg)
