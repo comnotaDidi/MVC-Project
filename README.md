@@ -43,3 +43,7 @@ git clone https://github.com/comnotaDidi/MVC-Project.git
 cd learning-tracker
 npm install
 node app.js
+
+## 🖼️ Zrzuty ekranu aplikacji 
+Strona główna z listą filmów
+![learning-tracker](./screenshots/1.png)
